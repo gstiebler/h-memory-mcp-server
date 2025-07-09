@@ -21,7 +21,13 @@ def add_memory(
     """Add a new memory at the specified position.
 
     Args:
-        position: List of descriptions representing the path to the parent memory
+        position: List of descriptions representing the hierarchical path to the parent memory.
+                 Each element is a memory description, forming a path from root to target.
+                 Examples:
+                 - [] = Add as child of root memory
+                 - ["projects"] = Add as child of the "projects" memory
+                 - ["projects", "work"] = Add as child of "work" under "projects"
+                 - ["notes", "meeting", "2024"] = Add under "2024" → "meeting" → "notes"
         description: Short description of the memory
         content: Optional longer text content
         tags: Optional list of tags for categorization
@@ -41,7 +47,13 @@ def read_memory(position: list[str]) -> dict:
     """Read a memory at the specified position.
 
     Args:
-        position: List of descriptions representing the path to the memory
+        position: List of descriptions representing the hierarchical path to the memory.
+                 Each element is a memory description, forming a path from root to target.
+                 Examples:
+                 - [] = Read the root memory
+                 - ["projects"] = Read the "projects" memory
+                 - ["projects", "work"] = Read "work" memory under "projects"
+                 - ["notes", "meeting", "2024"] = Read "2024" under "meeting" → "notes"
 
     Returns:
         Dictionary with memory details (excluding children) or error message
@@ -54,7 +66,13 @@ def list_children(position: list[str]) -> dict:
     """List all children of a memory at the specified position.
 
     Args:
-        position: List of descriptions representing the path to the memory
+        position: List of descriptions representing the hierarchical path to the memory.
+                 Each element is a memory description, forming a path from root to target.
+                 Examples:
+                 - [] = List children of the root memory
+                 - ["projects"] = List children of the "projects" memory
+                 - ["projects", "work"] = List children of "work" under "projects"
+                 - ["notes", "meeting", "2024"] = List children of "2024" under "meeting" → "notes"
 
     Returns:
         Dictionary with list of child descriptions or error message
@@ -72,7 +90,13 @@ def edit_memory(
     """Edit a memory at the specified position.
 
     Args:
-        position: List of descriptions representing the path to the memory
+        position: List of descriptions representing the hierarchical path to the memory.
+                 Each element is a memory description, forming a path from root to target.
+                 Examples:
+                 - [] = Edit the root memory
+                 - ["projects"] = Edit the "projects" memory
+                 - ["projects", "work"] = Edit "work" memory under "projects"
+                 - ["notes", "meeting", "2024"] = Edit "2024" under "meeting" → "notes"
         description: New description (optional)
         content: New content (optional)
         tags: New tags list (optional)
@@ -88,7 +112,13 @@ def remove_memory(position: list[str]) -> dict:
     """Remove a memory and all its children at the specified position.
 
     Args:
-        position: List of descriptions representing the path to the memory
+        position: List of descriptions representing the hierarchical path to the memory.
+                 Each element is a memory description, forming a path from root to target.
+                 Examples:
+                 - ["projects"] = Remove the "projects" memory and all its children
+                 - ["projects", "work"] = Remove "work" under "projects" and all its children
+                 - ["notes", "meeting", "2024"] = Remove "2024" under "meeting" → "notes"
+                 Note: The root memory (position []) cannot be removed.
 
     Returns:
         Dictionary with removal info or error message
