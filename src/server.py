@@ -1,12 +1,13 @@
 from fastmcp import FastMCP
+import typer
 
 from .memory_store import MemoryStore
 
 # Initialize the MCP server
 mcp: FastMCP = FastMCP("memory-server")
 
-# Initialize the memory store
-store = MemoryStore()
+# Global store variable that will be initialized in main
+store: MemoryStore
 
 
 @mcp.tool()
@@ -95,10 +96,16 @@ def remove_memory(position: list[str]) -> dict:
     return store.remove_memory(position)
 
 
-def main():
+def main(
+    memory_file: str = typer.Option(
+        ..., "--memory-file", "-f", help="Path to the JSON file where memories will be stored"
+    ),
+):
     """Run the MCP server."""
+    global store
+    store = MemoryStore(storage_path=memory_file)
     mcp.run(transport="stdio")
 
 
 if __name__ == "__main__":
-    main()
+    typer.run(main)
