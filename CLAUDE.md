@@ -21,16 +21,16 @@ Always use `uv` for all package operations:
 - `uv sync` - Install dependencies
 - `uv add <package>` - Add new dependency
 - `uv run <command>` - Run commands in the virtual environment
-- `uv run main.py` - Run the MCP server
+- `uv run -m src.server` - Run the MCP server
 
 ### Running the Server
 ```bash
-uv run main.py
+uv run -m src.server
 ```
 
 ### Testing Changes
 When testing the server:
-1. Run `uv run main.py` in one terminal
+1. Run `uv run -m src.server` in one terminal
 2. The server communicates via stdio (standard input/output)
 3. Send JSON-RPC messages to test functionality
 
@@ -47,16 +47,16 @@ The project uses automated tools to maintain code quality:
 #### Ruff (Linting and Formatting)
 ```bash
 # Check code style issues
-uv run ruff check src/ tests/ main.py
+uv run ruff check src/ tests/
 
 # Auto-fix issues
-uv run ruff check src/ tests/ main.py --fix
+uv run ruff check src/ tests/ --fix
 
 # Format code
-uv run ruff format src/ tests/ main.py
+uv run ruff format src/ tests/
 
 # Check if code is formatted correctly
-uv run ruff format --check src/ tests/ main.py
+uv run ruff format --check src/ tests/
 ```
 
 Ruff is configured in `pyproject.toml` with:
@@ -67,7 +67,7 @@ Ruff is configured in `pyproject.toml` with:
 #### MyPy (Type Checking)
 ```bash
 # Run type checker
-uv run mypy src/ tests/ main.py
+uv run mypy src/ tests/
 ```
 
 MyPy is configured for strict type checking with:
@@ -84,7 +84,7 @@ GitHub Actions automatically run on every push and pull request to ensure:
 **Important**: Always run these checks before committing:
 ```bash
 # Quick check everything
-uv run ruff format src/ tests/ main.py && uv run ruff check src/ tests/ main.py && uv run mypy src/ tests/ main.py
+uv run ruff format src/ tests/ && uv run ruff check src/ tests/ && uv run mypy src/ tests/
 ```
 
 ## Project Structure
@@ -97,12 +97,11 @@ memory-mcp-server/
 ├── src/
 │   ├── models.py         # Pydantic models for Memory and Position
 │   ├── memory_store.py   # Core storage logic with thread-safe operations
-│   └── server.py         # MCP server implementation with tool definitions
+│   └── server.py         # MCP server implementation with tool definitions (entry point)
 ├── tests/               # Test suite
 │   ├── test_models.py    # Tests for data models
 │   ├── test_memory_store.py # Tests for storage operations
 │   └── test_server.py    # Tests for MCP server functions
-├── main.py              # Entry point that runs the server
 ├── memories.json        # Persistent storage (auto-created)
 └── pyproject.toml       # Project config managed by uv
 ```

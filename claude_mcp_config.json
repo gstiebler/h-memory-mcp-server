@@ -2,7 +2,7 @@
   "mcpServers": {
     "memory": {
       "command": "uv",
-      "args": ["run", "main.py"],
+      "args": ["run", "-m", "src.server"],
       "cwd": "~/memory-mcp-server"
     }
   }
