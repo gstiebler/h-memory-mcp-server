@@ -41,14 +41,67 @@ When testing the server:
 - Use descriptive variable names
 - Thread safety is important - use locks when modifying shared state
 
+### Code Quality Tools
+The project uses automated tools to maintain code quality:
+
+#### Ruff (Linting and Formatting)
+```bash
+# Check code style issues
+uv run ruff check src/ tests/ main.py
+
+# Auto-fix issues
+uv run ruff check src/ tests/ main.py --fix
+
+# Format code
+uv run ruff format src/ tests/ main.py
+
+# Check if code is formatted correctly
+uv run ruff format --check src/ tests/ main.py
+```
+
+Ruff is configured in `pyproject.toml` with:
+- Line length: 88 characters
+- Target Python version: 3.12
+- Enabled rules: pycodestyle, pyflakes, isort, flake8-bugbear, flake8-comprehensions, pyupgrade
+
+#### MyPy (Type Checking)
+```bash
+# Run type checker
+uv run mypy src/ tests/ main.py
+```
+
+MyPy is configured for strict type checking with:
+- Python version: 3.12
+- Strict mode enabled
+- All type checking flags enabled
+
+#### CI/CD
+GitHub Actions automatically run on every push and pull request to ensure:
+- Code is properly formatted (ruff format --check)
+- No linting issues (ruff check)
+- Type annotations are correct (mypy)
+
+**Important**: Always run these checks before committing:
+```bash
+# Quick check everything
+uv run ruff format src/ tests/ main.py && uv run ruff check src/ tests/ main.py && uv run mypy src/ tests/ main.py
+```
+
 ## Project Structure
 
 ```
 memory-mcp-server/
+├── .github/
+│   └── workflows/
+│       └── ci.yml        # GitHub Actions CI/CD workflow
 ├── src/
 │   ├── models.py         # Pydantic models for Memory and Position
 │   ├── memory_store.py   # Core storage logic with thread-safe operations
 │   └── server.py         # MCP server implementation with tool definitions
+├── tests/               # Test suite
+│   ├── test_models.py    # Tests for data models
+│   ├── test_memory_store.py # Tests for storage operations
+│   └── test_server.py    # Tests for MCP server functions
 ├── main.py              # Entry point that runs the server
 ├── memories.json        # Persistent storage (auto-created)
 └── pyproject.toml       # Project config managed by uv
