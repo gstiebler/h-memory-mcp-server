@@ -1,10 +1,12 @@
 from datetime import datetime
 from typing import Optional, List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 import uuid
 
 
 class Memory(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     description: str
     content: Optional[str] = None
@@ -16,12 +18,9 @@ class Memory(BaseModel):
     last_accessed: datetime = Field(default_factory=datetime.now)
     children: List['Memory'] = Field(default_factory=list)
 
-    class Config:
-        arbitrary_types_allowed = True
-
     def to_dict(self):
         """Convert memory to dictionary, including children."""
-        data = self.dict(exclude={'children'})
+        data = self.model_dump(exclude={'children'})
         data['created_at'] = self.created_at.isoformat()
         data['last_accessed'] = self.last_accessed.isoformat()
         if self.updated_at:

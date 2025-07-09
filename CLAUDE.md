@@ -74,6 +74,14 @@ memory-mcp-server/
 2. Update `to_dict()` and `from_dict()` methods for serialization
 3. Consider backward compatibility with existing storage files
 
+### Testing
+Run the comprehensive test suite:
+```bash
+uv run pytest -v        # Run all tests
+uv run pytest -s        # Show print statements
+uv run pytest --cov=src # With coverage report
+```
+
 ### Debugging
 - Check `memories.json` for the current state
 - Use print statements in the server (they go to stderr)

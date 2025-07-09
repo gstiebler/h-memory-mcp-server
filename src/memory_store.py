@@ -40,9 +40,13 @@ class MemoryStore:
     def _save(self):
         """Save memories to JSON file."""
         with self.lock:
-            data = self.root_memory.to_dict()
-            with open(self.storage_path, 'w') as f:
-                json.dump(data, f, indent=2)
+            self._save_without_lock()
+    
+    def _save_without_lock(self):
+        """Save memories to JSON file without acquiring lock (internal use only)."""
+        data = self.root_memory.to_dict()
+        with open(self.storage_path, 'w') as f:
+            json.dump(data, f, indent=2)
 
     def _navigate_to_position(self, position: Position) -> Optional[Memory]:
         """Navigate to a memory at the given position."""
@@ -77,7 +81,7 @@ class MemoryStore:
             )
             
             parent.children.append(new_memory)
-            self._save()
+            self._save_without_lock()
             
             return {
                 "id": new_memory.id,
@@ -160,7 +164,7 @@ class MemoryStore:
                 memory.tags = tags
             
             memory.updated_at = datetime.now()
-            self._save()
+            self._save_without_lock()
             
             return {
                 "id": memory.id,
@@ -186,7 +190,7 @@ class MemoryStore:
             for i, child in enumerate(parent.children):
                 if child.description == target_description:
                     removed = parent.children.pop(i)
-                    self._save()
+                    self._save_without_lock()
                     return {
                         "removed": removed.description,
                         "children_removed": self._count_all_children(removed)
