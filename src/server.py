@@ -7,7 +7,7 @@ from .memory_store import MemoryStore
 mcp: FastMCP = FastMCP("memory-server")
 
 # Global store variable that will be initialized in main
-store: MemoryStore
+store: MemoryStore | None = None
 
 
 @mcp.tool()
@@ -39,6 +39,8 @@ def add_memory(
     if tags is None:
         tags = []
 
+    if store is None:
+        raise RuntimeError("Memory store not initialized")
     return store.add_memory(position, description, content, tags, author)
 
 
@@ -58,6 +60,8 @@ def read_memory(position: list[str]) -> dict:
     Returns:
         Dictionary with memory details (excluding children) or error message
     """
+    if store is None:
+        raise RuntimeError("Memory store not initialized")
     return store.read_memory(position)
 
 
@@ -77,6 +81,8 @@ def list_children(position: list[str]) -> dict:
     Returns:
         Dictionary with list of child descriptions or error message
     """
+    if store is None:
+        raise RuntimeError("Memory store not initialized")
     return store.list_children(position)
 
 
@@ -104,6 +110,8 @@ def edit_memory(
     Returns:
         Dictionary with updated memory info or error message
     """
+    if store is None:
+        raise RuntimeError("Memory store not initialized")
     return store.edit_memory(position, description, content, tags)
 
 
@@ -123,6 +131,8 @@ def remove_memory(position: list[str]) -> dict:
     Returns:
         Dictionary with removal info or error message
     """
+    if store is None:
+        raise RuntimeError("Memory store not initialized")
     return store.remove_memory(position)
 
 
