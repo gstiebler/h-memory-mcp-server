@@ -22,4 +22,4 @@ dev = [
 line-length = 110
 
 [project.scripts]
-h-memory-mcp-server = "src.server:main"
+h-memory-mcp-server = "src.server:cli_main"

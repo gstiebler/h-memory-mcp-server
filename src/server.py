@@ -137,5 +137,10 @@ def main(
     mcp.run(transport="stdio")
 
 
-if __name__ == "__main__":
+def cli_main():
+    """Entry point for the CLI."""
     typer.run(main)
+
+
+if __name__ == "__main__":
+    cli_main()
