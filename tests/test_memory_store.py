@@ -116,16 +116,18 @@ class TestMemoryStore:
         """Test listing children."""
         store = MemoryStore(temp_storage_file)
 
-        # Add some memories
-        store.add_memory([], "parent", None, ["category"], "user")
-        store.add_memory(["parent"], "child1", None, ["tag1"], "user")
-        store.add_memory(["parent"], "child2", None, ["tag2"], "user")
-        store.add_memory(["parent", "child1"], "grandchild", None, [], "user")
+        # Add some memories with content
+        store.add_memory([], "parent", "parent content", ["category"], "user")
+        store.add_memory(["parent"], "child1", "child1 content", ["tag1"], "user")
+        store.add_memory(["parent"], "child2", "child2 content", ["tag2"], "user")
+        store.add_memory(["parent", "child1"], "grandchild", "grandchild content", [], "user")
 
         # List root children
         root_children = store.list_children([])
         assert len(root_children["children"]) == 1
         assert root_children["children"][0]["description"] == "parent"
+        assert root_children["children"][0]["content"] == "parent content"
+        assert root_children["children"][0]["tags"] == ["category"]
 
         # List parent children
         parent_children = store.list_children(["parent"])
@@ -134,12 +136,16 @@ class TestMemoryStore:
         assert "child1" in descriptions
         assert "child2" in descriptions
 
-        # Check has_children flag
+        # Check children_count and content
         child1_info = next(c for c in parent_children["children"] if c["description"] == "child1")
-        assert child1_info["has_children"] is True
+        assert child1_info["children_count"] == 1  # Has one grandchild
+        assert child1_info["content"] == "child1 content"
+        assert child1_info["tags"] == ["tag1"]
 
         child2_info = next(c for c in parent_children["children"] if c["description"] == "child2")
-        assert child2_info["has_children"] is False
+        assert child2_info["children_count"] == 0  # No children
+        assert child2_info["content"] == "child2 content"
+        assert child2_info["tags"] == ["tag2"]
 
     def test_edit_memory(self, temp_storage_file):
         """Test editing a memory."""

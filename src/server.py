@@ -79,7 +79,7 @@ def list_children(position: list[str]) -> dict:
                  - ["notes", "meeting", "2024"] = List children of "2024" under "meeting" → "notes"
 
     Returns:
-        Dictionary with list of child descriptions or error message
+        Dictionary with list of children including description, content, tags, and children_count
     """
     if store is None:
         raise RuntimeError("Memory store not initialized")

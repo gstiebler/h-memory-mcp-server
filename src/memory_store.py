@@ -112,7 +112,12 @@ class MemoryStore:
             return {"error": f"Memory at position {position} not found"}
 
         children = [
-            {"description": child.description, "has_children": len(child.children) > 0, "tags": child.tags}
+            {
+                "description": child.description,
+                "content": child.content,
+                "children_count": len(child.children),
+                "tags": child.tags,
+            }
             for child in memory.children
         ]
 
