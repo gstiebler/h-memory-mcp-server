@@ -1,0 +1,72 @@
+# mise.toml - Task runner configuration for Memory MCP Server
+
+[tools]
+python = "3.12"
+
+[tasks.lint]
+description = "Run ruff linter"
+run = "uv run ruff check src/ tests/"
+
+[tasks.lint-fix]
+description = "Run ruff linter with auto-fix"
+run = "uv run ruff check src/ tests/ --fix"
+
+[tasks.format]
+description = "Format code with ruff"
+run = "uv run ruff format src/ tests/"
+
+[tasks.format-check]
+description = "Check code formatting"
+run = "uv run ruff format --check src/ tests/"
+
+[tasks.mypy]
+description = "Run type checker"
+run = "uv run mypy src/ tests/"
+
+[tasks.test]
+description = "Run all tests"
+run = "uv run pytest -v"
+
+[tasks.test-cov]
+description = "Run tests with coverage"
+run = "uv run pytest --cov=src --cov-report=term-missing"
+
+[tasks.check]
+description = "Run all checks (format, lint, type check)"
+run = [
+    "mise run format-check",
+    "mise run lint",
+    "mise run mypy"
+]
+
+[tasks.fix]
+description = "Auto-fix formatting and linting issues"
+run = [
+    "mise run format",
+    "mise run lint-fix"
+]
+
+[tasks.all]
+description = "Run all checks and tests"
+run = [
+    "mise run check",
+    "mise run test"
+]
+
+[tasks.dev]
+description = "Run the MCP server in development mode"
+run = "uv run -m src.server --memory-file memories.json"
+
+[tasks.install]
+description = "Install project dependencies"
+run = "uv sync"
+
+[tasks.clean]
+description = "Clean up generated files"
+run = [
+    "rm -rf .pytest_cache",
+    "rm -rf .mypy_cache",
+    "rm -rf .ruff_cache",
+    "find . -type d -name __pycache__ -exec rm -rf {} + || true",
+    "rm -f .coverage"
+]

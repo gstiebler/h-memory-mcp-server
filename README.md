@@ -89,6 +89,41 @@ remove_memory(position=["projects", "mcp"])
 
 ## Development
 
+### Using Mise for Task Management
+
+This project includes a `mise.toml` configuration file that provides convenient tasks for common development operations:
+
+```bash
+# Install mise (if not already installed)
+# See https://mise.jdx.dev for installation instructions
+
+# Run all checks (format, lint, type check)
+mise run check
+
+# Run all tests
+mise run test
+
+# Run tests with coverage
+mise run test-cov
+
+# Auto-fix formatting and linting issues
+mise run fix
+
+# Run all checks and tests
+mise run all
+
+# Run individual tasks
+mise run format      # Format code with ruff
+mise run lint        # Run ruff linter
+mise run mypy        # Run type checker
+
+# Development server
+mise run dev         # Run the MCP server
+
+# Clean generated files
+mise run clean
+```
+
 ### Code Quality
 
 The project uses automated tools to maintain code quality:
